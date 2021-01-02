@@ -1,32 +1,28 @@
 
 <div class="wrapper">
-  <div class="row">
-    <div *ngFor="let file of selectedFiles">
-      <ul>
-        <li >{{file.name}}</li>
-      </ul>
-    </div>
+  <div class="row overflow-auto" style="height: 250px">
     <h6>Uploading {{progressInfos.length}} items</h6>
-    <div *ngFor="let progressInfo of progressInfos" class="mb-2">
-      <h6>{{ progressInfo.fileName }}</h6>
-      <div class="progress progress-striped active" style="width: 500px; margin: 0px auto; height: 40px; float:left">
+    <br>
+    <div *ngFor="let file of selectedFiles; let i = index" class="mb-2">
+       <h6> {{file.name}}</h6>
+       <div class="progress progress-striped active" style="width: 500px; margin: 0px auto; height: 40px; float:left">
         <div
           id="progressbar"
           class="progress-bar progress-bar-success"
           role="progressbar"
           style="width:20%;"
-          attr.aria-valuenow="{{ progressInfo.value }}"
+          attr.aria-valuenow="{{ progressInfos[i].value }}"
           aria-valuemin="0"
           aria-valuemax="100"
-          [ngStyle]="{ width: progressInfo.value + '%' }">
-          {{ progressInfo.value }}%
+          [ngStyle]="{ width: progressInfos[i].value + '%' }">
         </div>
       </div>
       <div style="display: inline; float:left; position:relative; top:3px; left:10px;">
-        <button class="btn btn-danger" >Cancel</button>
+        <button class="btn btn-danger" (click)="task[i].pause()">Delete</button>
       </div>
       </div>
   </div>
+  <h4>{{progressInfos[0].fileName}}</h4>
   <!-- <div class="progress">
     <div
       class="progress-bar progress-bar-info progress-bar-striped"

@@ -13,6 +13,7 @@ export class FileUploaderComponent implements OnInit {
   message: string;
   selectedFiles: FileList;
   progressInfos = [];
+  task = [];
 
   fileInfos: Observable<any>;
 
@@ -24,7 +25,7 @@ export class FileUploaderComponent implements OnInit {
   uploadFiles(event) {
     this.selectedFiles = event.target.files;
     this.message = '';
-
+    this.selectedFiles['progressInfos'] = [];
     for (let i = 0; i < this.selectedFiles.length; i++) {
         this.upload(i, this.selectedFiles[i])
     }
@@ -32,29 +33,34 @@ export class FileUploaderComponent implements OnInit {
 
   upload(idx, file) {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
-    console.log(this.progressInfos[idx]);
+    this.selectedFiles['progressInfos'][idx] = { value: 0, fileName: file.name };
+    console.log(this.selectedFiles);
 
-    //let filePath = `${file}_${new Date().getTime()}`;
     const filePath = file.name;
     const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
+    this.task[idx] = this.storage.upload(filePath, file);
 
-    task.percentageChanges()
+    this.task[idx].percentageChanges()
     .pipe(finalize(()=> {
       fileRef.getDownloadURL().subscribe((url) => {
-        //this.progressInfos[idx].value = Math.round(100 * url.loaded / url.total);
+        this.progressInfos[idx].value = Math.round(100 * url.loaded / url.total);
       })
     })
     )
     .subscribe((res) => {
       this.progressInfos[idx].value = res;
-      console.log(res);
+      this.selectedFiles['progressInfos'][idx].value = res;
+      console.log(this.selectedFiles['progressInfos'][0].fileName);
     }),
       err => {
         this.progressInfos[idx].value = 0;
         this.message = 'Could not upload the file:' + file.name;
       };
   };
+
+  pauseUpload(file) {
+
+  }
 
   // stopUpload(fileName, file) {
   //   const task = this.storage.upload(fileName, file);
