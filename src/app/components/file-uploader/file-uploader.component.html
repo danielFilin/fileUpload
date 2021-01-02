@@ -1,0 +1,32 @@
+
+<div class="wrapper">
+  <div class="row overflow-auto" *ngIf="progressInfos.length" [className]="uploadWindow ? 'upload-div' : 'hide-items'">
+    <div class="upload-header">
+      <h6>Uploading {{progressInfos.length}} items<label class="arrow" (click)="onToggleView()">⛛</label><label class="arrow" (click)="stopAll()">❌</label></h6>
+    </div>
+    <br>
+    <div *ngFor="let file of selectedFiles; let i = index" class="p-1">
+       <p>{{file?.name}} {{  (file?.size / (1024*1024)).toFixed(2)}}Mb</p>
+       <div class="progress progress-striped active" style="width: 500px; margin: 0px auto; float:left">
+        <div
+          id="progressbar"
+          class="progress-bar progress-bar-success"
+          role="progressbar"
+          style="width:20%;"
+          attr.aria-valuenow="{{ progressInfos[i].value }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [ngStyle]="{ width: progressInfos[i].value + '%' }">
+        </div>
+      </div>
+      <div style="display: inline; float:left; position:relative; top:3px; left:10px;">
+        <label *ngIf="progressInfos[i].value !== 100" class="btn btn-danger" (click)="task[i].pause()">🗑️</label>
+        <label *ngIf="progressInfos[i].value === 100">✔️</label>
+      </div>
+      </div>
+  </div>
+</div>
+<h2>Upload Files</h2>
+<span><i class="glyphicon glyphicon-triangle-bottom"></i></span>
+<input id="input-2" name="input2[]" type="file" class="file"  data-show-upload="false" data-show-caption="true" multiple (change)="uploadFiles($event)">
+<div class="alert alert-light" role="alert">{{ message }}</div>
