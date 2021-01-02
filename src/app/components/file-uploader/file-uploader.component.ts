@@ -1,9 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-
-import { Observable, pipe } from 'rxjs';
-import { finalize} from 'rxjs/operators';
-
 @Component({
   selector: 'app-file-uploader',
   templateUrl: './file-uploader.component.html',
@@ -21,7 +17,6 @@ export class FileUploaderComponent {
   uploadFiles(event) {
     this.selectedFiles = event.target.files;
     this.message = '';
-    this.selectedFiles['progressInfos'] = [];
     for (let i = 0; i < this.selectedFiles.length; i++) {
         this.upload(i, this.selectedFiles[i])
     }
@@ -29,13 +24,11 @@ export class FileUploaderComponent {
 
   upload(idx, file) {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
-    this.selectedFiles['progressInfos'][idx] = { value: 0, fileName: file.name };
     const filePath = file.name;
     this.task[idx] = this.storage.upload(filePath, file);
     this.task[idx].percentageChanges()
     .subscribe((res) => {
       this.progressInfos[idx].value = res;
-      this.selectedFiles['progressInfos'][idx].value = res;
     }),
       err => {
         this.progressInfos[idx].value = 0;

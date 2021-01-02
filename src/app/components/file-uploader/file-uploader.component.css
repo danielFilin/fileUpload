@@ -1,4 +1,4 @@
-.upload-div {
+.upload-div, .hide-items {
   background-color: white;
   border: 2px solid black;
   border-radius: 2px;
@@ -7,7 +7,7 @@
   position: fixed;
   bottom: 0;
   right: 0;
-  max-height: 58%;
+  max-height: 70%;
 }
 
 .upload-header {
@@ -25,15 +25,7 @@
   cursor: pointer;
 }
 
-.show {
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 2px;
-  z-index: 1;
-
-  position: fixed;
-  bottom: 0;
-  right: 0;
+.hide-items {
   height: 2.5rem;
+  overflow: hidden;
 }
-

@@ -1,13 +1,12 @@
 
 <div class="wrapper">
-  <div class="row overflow-auto" *ngIf="progressInfos.length" [className]="uploadWindow ? 'upload-div' : 'show'">
-
+  <div class="row overflow-auto" *ngIf="progressInfos.length" [className]="uploadWindow ? 'upload-div' : 'hide-items'">
     <div class="upload-header">
       <h6>Uploading {{progressInfos.length}} items<label class="arrow" (click)="onToggleView()">⛛</label><label class="arrow" (click)="stopAll()">❌</label></h6>
     </div>
     <br>
-    <div *ngFor="let file of selectedFiles; let i = index" class="mb-2 p-3">
-       <h6> {{file?.name}}</h6>
+    <div *ngFor="let file of selectedFiles; let i = index" class="p-1">
+       <p>{{file?.name}} {{  (file?.size / (1024*1024)).toFixed(2)}}Mb</p>
        <div class="progress progress-striped active" style="width: 500px; margin: 0px auto; float:left">
         <div
           id="progressbar"
@@ -26,7 +25,6 @@
       </div>
       </div>
   </div>
-  <h4>{{progressInfos[0]?.fileName}}</h4>
 </div>
 <h2>Upload Files</h2>
 <span><i class="glyphicon glyphicon-triangle-bottom"></i></span>

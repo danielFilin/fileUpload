@@ -6,22 +6,18 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { AppComponent } from './app.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
-import { FileUploadListComponent } from './components/file-upload-list/file-upload-list.component';
 import { environment } from 'src/environments/environment';
-import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FileUploaderComponent,
-    FileUploadListComponent
+    FileUploaderComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
-    AngularFireDatabaseModule,
-    ReactiveFormsModule
+    AngularFireDatabaseModule
   ],
   providers: [],
   bootstrap: [AppComponent]
