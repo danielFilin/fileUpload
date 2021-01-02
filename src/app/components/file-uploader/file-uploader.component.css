@@ -1,0 +1,39 @@
+.upload-div {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 2px;
+  z-index: 1;
+  overflow: scroll;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  max-height: 58%;
+}
+
+.upload-header {
+  width: 100%;
+  height: 2.5rem;
+  background-color: black;
+  color: white;
+}
+
+.arrow {
+  float: right;
+  margin-right: 1.5%;
+  color: red;
+  font-size: x-large;
+  cursor: pointer;
+}
+
+.show {
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 2px;
+  z-index: 1;
+
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  height: 2.5rem;
+}
+

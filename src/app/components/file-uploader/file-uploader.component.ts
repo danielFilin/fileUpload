@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { FormControl, FormGroup } from '@angular/forms';
+
 import { Observable, pipe } from 'rxjs';
 import { finalize} from 'rxjs/operators';
 
@@ -9,18 +9,14 @@ import { finalize} from 'rxjs/operators';
   templateUrl: './file-uploader.component.html',
   styleUrls: ['./file-uploader.component.css']
 })
-export class FileUploaderComponent implements OnInit {
+export class FileUploaderComponent {
   message: string;
   selectedFiles: FileList;
   progressInfos = [];
   task = [];
-
-  fileInfos: Observable<any>;
+  uploadWindow: Boolean = true;
 
   constructor(private storage: AngularFireStorage) { }
-
-  ngOnInit(): void {
-  }
 
   uploadFiles(event) {
     this.selectedFiles = event.target.files;
@@ -34,23 +30,12 @@ export class FileUploaderComponent implements OnInit {
   upload(idx, file) {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
     this.selectedFiles['progressInfos'][idx] = { value: 0, fileName: file.name };
-    console.log(this.selectedFiles);
-
     const filePath = file.name;
-    const fileRef = this.storage.ref(filePath);
     this.task[idx] = this.storage.upload(filePath, file);
-
     this.task[idx].percentageChanges()
-    .pipe(finalize(()=> {
-      fileRef.getDownloadURL().subscribe((url) => {
-        this.progressInfos[idx].value = Math.round(100 * url.loaded / url.total);
-      })
-    })
-    )
     .subscribe((res) => {
       this.progressInfos[idx].value = res;
       this.selectedFiles['progressInfos'][idx].value = res;
-      console.log(this.selectedFiles['progressInfos'][0].fileName);
     }),
       err => {
         this.progressInfos[idx].value = 0;
@@ -58,36 +43,17 @@ export class FileUploaderComponent implements OnInit {
       };
   };
 
-  pauseUpload(file) {
-
+  onToggleView() {
+    if (this.uploadWindow) {
+      this.uploadWindow = false;
+    } else {
+      this.uploadWindow = true;
+    }
   }
 
-  // stopUpload(fileName, file) {
-  //   const task = this.storage.upload(fileName, file);
-
-  // }
-
-
-  // upload(idx, file) {
-  //   this.progressInfos[idx] = { value: 0, fileName: file.name };
-
-  //   let filePath = `${file}_${new Date().getTime()}`;
-  //   const fileRef = this.storage.ref(filePath);
-  //   this.storage.upload(filePath, file).snapshotChanges( )
-  //   .pipe(finalize(()=> {
-  //     fileRef.getDownloadURL().subscribe((url) => {
-  //       this.progressInfos[idx].value = Math.round(100 * url.loaded / url.total);
-  //       console.log(url);
-  //     })
-  //   })
-  //   )
-  //   .subscribe((res) => {
-  //     console.log(res);
-  //   }),
-  //     err => {
-  //       this.progressInfos[idx].value = 0;
-  //       this.message = 'Could not upload the file:' + file.name;
-  //     };
-  // }
+  stopAll() {
+    this.progressInfos.length = 0;
+    this.task.forEach( task => task.pause());
+  }
 
 }
